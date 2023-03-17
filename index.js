@@ -27,6 +27,11 @@ let persons = [
 ]
 
 
+const generateId = () => {
+  return Math.floor(Math.random() * 10000) + 1
+}
+
+
 app.get('/', (req, res) => {
   res.send('<h1>Phonebook backend</h1>')
 })
@@ -63,6 +68,31 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
+
+app.post('/api/persons', (req, res) => {
+
+  if (!req.body.name) {
+    return res.status(400).json({
+      error: 'missing name'
+    })
+  }
+
+  if (!req.body.number) {
+    return res.status(400).json({
+      error: 'missing number'
+    })
+  }
+
+  const person = {
+    id: generateId(),
+    name: req.body.name,
+    number: req.body.number
+  }
+
+  persons = persons.concat(person)
+
+  res.json(person)
+})
 
 
 const PORT = 3001
